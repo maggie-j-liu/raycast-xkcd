@@ -8,9 +8,9 @@
   "commands": [
     {
       "name": "index",
-      "title": "xkcd Comics",
+      "title": "xkcd",
       "subtitle": "",
-      "description": "Browse xkcd comics.",
+      "description": "Browse the xkcd comics.",
       "mode": "view"
     }
   ],
