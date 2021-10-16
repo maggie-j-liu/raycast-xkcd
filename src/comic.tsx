@@ -1,6 +1,6 @@
 import { ActionPanel, Detail, OpenInBrowserAction, PushAction } from "@raycast/api";
 import { useEffect, useState } from "react";
-import OpenComic from "./open_comic";
+import OpenComic, { OpenRandomComic } from "./open_comic";
 import { BASE_URL, Comic, fetchComic } from "./xkcd";
 
 const ComicPage = ({ maxNum, num }: { maxNum: number; num: number }) => {
@@ -25,8 +25,18 @@ ${comicData.alt}
       actions={
         <ActionPanel>
           <OpenInBrowserAction url={`${BASE_URL}/${num}/`} />
-          {num !== 1 && <OpenComic maxNum={maxNum} num={num - 1} title="Previous Comic" />}
-          {num !== maxNum && <OpenComic maxNum={maxNum} num={num + 1} title="Next Comic" />}
+          <OpenRandomComic maxNum={maxNum} />
+          {num !== 1 && (
+            <OpenComic
+              maxNum={maxNum}
+              num={num - 1}
+              title="Previous Comic"
+              shortcut={{ key: "h", modifiers: ["cmd"] }}
+            />
+          )}
+          {num !== maxNum && (
+            <OpenComic maxNum={maxNum} num={num + 1} title="Next Comic" shortcut={{ key: "l", modifiers: ["cmd"] }} />
+          )}
         </ActionPanel>
       }
     />
