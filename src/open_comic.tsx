@@ -8,7 +8,6 @@ export const OpenComic = ({
 }: {
   num: number;
 } & Partial<PushActionProps>) => {
-  const [maxNum] = useAtom(maxNumAtom);
   return <PushAction title={`Open Comic #${num}`} target={<ComicPage num={num} />} {...props} />;
 };
 export default OpenComic;

@@ -3,28 +3,23 @@ import { useEffect, useState } from "react";
 import { maxNum } from "./xkcd";
 import { OpenComic, OpenRandomComic } from "./open_comic";
 import { useAtom } from "jotai";
-import { maxNumAtom } from "./atoms";
+import { maxNumAtom, readStatusAtom } from "./atoms";
 
-interface Status {
-  [key: number]: boolean;
-}
 export default function main() {
   const [num, setNum] = useAtom(maxNumAtom);
-  const [readStatus, setReadStatus] = useState<Status>({});
+  const [readStatus, setReadStatus] = useAtom(readStatusAtom);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
       const data = await maxNum();
       setNum(data);
       const items = await allLocalStorageItems();
-      console.log(items);
       for (const [key, val] of Object.entries(items)) {
         if (key.startsWith("read:comic:")) {
           const comicNum = Number(key.slice("read:comic:".length));
           readStatus[comicNum] = val;
         }
       }
-      console.log(readStatus);
       setReadStatus({ ...readStatus });
       setLoading(false);
     })();
