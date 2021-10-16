@@ -1,4 +1,4 @@
-import { ActionPanel, allLocalStorageItems, Icon, List } from "@raycast/api";
+import { ActionPanel, allLocalStorageItems, Color, Icon, List } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { maxNum } from "./xkcd";
 import { OpenComic, OpenRandomComic } from "./open_comic";
@@ -59,7 +59,8 @@ export default function main() {
                 <OpenComic num={num - idx} />
               </ActionPanel>
             }
-            icon={readStatus[num - idx] ? Icon.Checkmark : Icon.XmarkCircle}
+            accessoryIcon={readStatus[num - idx] ? undefined : { source: Icon.Dot, tintColor: Color.Blue }}
+            accessoryTitle={readStatus[num - idx] ? "" : "unread"}
           />
         ))}
       </List.Section>
