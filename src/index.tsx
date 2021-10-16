@@ -2,12 +2,14 @@ import { ActionPanel, allLocalStorageItems, Icon, List } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { maxNum } from "./xkcd";
 import { OpenComic, OpenRandomComic } from "./open_comic";
+import { useAtom } from "jotai";
+import { maxNumAtom } from "./atoms";
 
 interface Status {
   [key: number]: boolean;
 }
 export default function main() {
-  const [num, setNum] = useState(-1);
+  const [num, setNum] = useAtom(maxNumAtom);
   const [readStatus, setReadStatus] = useState<Status>({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -37,7 +39,7 @@ export default function main() {
           subtitle="View a random xkcd comic."
           actions={
             <ActionPanel>
-              <OpenRandomComic maxNum={num} />
+              <OpenRandomComic />
             </ActionPanel>
           }
         />
@@ -46,7 +48,7 @@ export default function main() {
           subtitle="View the latest xkcd comic."
           actions={
             <ActionPanel>
-              <OpenComic maxNum={num} num={num} />
+              <OpenComic num={num} />
             </ActionPanel>
           }
         />
@@ -59,7 +61,7 @@ export default function main() {
             keywords={[num - idx + ""]}
             actions={
               <ActionPanel>
-                <OpenComic maxNum={num} num={num - idx} />
+                <OpenComic num={num - idx} />
               </ActionPanel>
             }
             icon={readStatus[num - idx] ? Icon.Checkmark : Icon.XmarkCircle}

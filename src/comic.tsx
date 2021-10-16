@@ -1,10 +1,13 @@
 import { ActionPanel, Detail, OpenInBrowserAction, setLocalStorageItem } from "@raycast/api";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
+import { maxNumAtom } from "./atoms";
 import OpenComic, { OpenRandomComic } from "./open_comic";
 import { BASE_URL, Comic, fetchComic } from "./xkcd";
 
-const ComicPage = ({ maxNum, num }: { maxNum: number; num: number }) => {
+const ComicPage = ({ num }: { num: number }) => {
   const [comicData, setComicData] = useState<Comic | null>(null);
+  const [maxNum] = useAtom(maxNumAtom);
   useEffect(() => {
     (async () => {
       const data = await fetchComic(num);
@@ -26,18 +29,9 @@ ${comicData.alt}
       actions={
         <ActionPanel>
           <OpenInBrowserAction url={`${BASE_URL}/${num}/`} />
-          <OpenRandomComic maxNum={maxNum} />
-          {num !== 1 && (
-            <OpenComic
-              maxNum={maxNum}
-              num={num - 1}
-              title="Previous Comic"
-              shortcut={{ key: "h", modifiers: ["cmd"] }}
-            />
-          )}
-          {num !== maxNum && (
-            <OpenComic maxNum={maxNum} num={num + 1} title="Next Comic" shortcut={{ key: "l", modifiers: ["cmd"] }} />
-          )}
+          <OpenRandomComic />
+          {num !== 1 && <OpenComic num={num - 1} title="Previous Comic" shortcut={{ key: "h", modifiers: ["cmd"] }} />}
+          {num !== maxNum && <OpenComic num={num + 1} title="Next Comic" shortcut={{ key: "l", modifiers: ["cmd"] }} />}
         </ActionPanel>
       }
     />
