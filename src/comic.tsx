@@ -1,4 +1,4 @@
-import { ActionPanel, Detail, OpenInBrowserAction, PushAction } from "@raycast/api";
+import { ActionPanel, Detail, OpenInBrowserAction, setLocalStorageItem } from "@raycast/api";
 import { useEffect, useState } from "react";
 import OpenComic, { OpenRandomComic } from "./open_comic";
 import { BASE_URL, Comic, fetchComic } from "./xkcd";
@@ -9,6 +9,7 @@ const ComicPage = ({ maxNum, num }: { maxNum: number; num: number }) => {
     (async () => {
       const data = await fetchComic(num);
       setComicData(data);
+      await setLocalStorageItem(`read:comic:${num}`, true);
     })();
   }, [num]);
   if (comicData === null) return <Detail isLoading />;

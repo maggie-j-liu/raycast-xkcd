@@ -1,6 +1,13 @@
 import { PushAction, PushActionProps } from "@raycast/api";
 import ComicPage from "./comic";
-export const OpenComic = ({ maxNum, num, ...props }: { maxNum: number; num: number } & Partial<PushActionProps>) => {
+export const OpenComic = ({
+  maxNum,
+  num,
+  ...props
+}: {
+  maxNum: number;
+  num: number;
+} & Partial<PushActionProps>) => {
   return <PushAction title={`Open Comic #${num}`} target={<ComicPage maxNum={maxNum} num={num} />} {...props} />;
 };
 export default OpenComic;

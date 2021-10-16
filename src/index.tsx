@@ -1,18 +1,34 @@
-import { ActionPanel, List } from "@raycast/api";
+import { ActionPanel, allLocalStorageItems, Icon, List } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { maxNum } from "./xkcd";
 import { OpenComic, OpenRandomComic } from "./open_comic";
 
+interface Status {
+  [key: number]: boolean;
+}
 export default function main() {
   const [num, setNum] = useState(-1);
+  const [readStatus, setReadStatus] = useState<Status>({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log("useeffect");
     (async () => {
       const data = await maxNum();
       setNum(data);
+      const items = await allLocalStorageItems();
+      console.log(items);
+      for (const [key, val] of Object.entries(items)) {
+        if (key.startsWith("read:comic:")) {
+          const comicNum = Number(key.slice("read:comic:".length));
+          readStatus[comicNum] = val;
+        }
+      }
+      console.log(readStatus);
+      setReadStatus({ ...readStatus });
+      setLoading(false);
     })();
   }, []);
-  if (num < 0) return <List isLoading />;
+
+  if (loading) return <List isLoading />;
   return (
     <List>
       <List.Section title="Commands">
@@ -46,6 +62,7 @@ export default function main() {
                 <OpenComic maxNum={num} num={num - idx} />
               </ActionPanel>
             }
+            icon={readStatus[num - idx] ? Icon.Checkmark : Icon.XmarkCircle}
           />
         ))}
       </List.Section>
