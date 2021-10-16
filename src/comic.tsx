@@ -1,8 +1,9 @@
-import { Detail } from "@raycast/api";
+import { ActionPanel, Detail, OpenInBrowserAction, PushAction } from "@raycast/api";
 import { useEffect, useState } from "react";
-import { Comic, fetchComic } from "./xkcd";
+import OpenComic from "./open_comic";
+import { BASE_URL, Comic, fetchComic } from "./xkcd";
 
-const ComicPage = ({ num }: { num: number }) => {
+const ComicPage = ({ maxNum, num }: { maxNum: number; num: number }) => {
   const [comicData, setComicData] = useState<Comic | null>(null);
   useEffect(() => {
     (async () => {
@@ -18,6 +19,17 @@ const ComicPage = ({ num }: { num: number }) => {
 
 ${comicData.alt}
 `;
-  return <Detail markdown={markdownString} />;
+  return (
+    <Detail
+      markdown={markdownString}
+      actions={
+        <ActionPanel>
+          <OpenInBrowserAction url={`${BASE_URL}/${num}/`} />
+          {num !== 1 && <OpenComic maxNum={maxNum} num={num - 1} title="Previous Comic" />}
+          {num !== maxNum && <OpenComic maxNum={maxNum} num={num + 1} title="Next Comic" />}
+        </ActionPanel>
+      }
+    />
+  );
 };
 export default ComicPage;

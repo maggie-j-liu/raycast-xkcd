@@ -1,5 +1,5 @@
-import fetch from 'node-fetch'
-const BASE_URL = "https://xkcd.com"
+import fetch from "node-fetch";
+export const BASE_URL = "https://xkcd.com";
 
 interface XKCD {
   month: string;
@@ -15,30 +15,30 @@ interface XKCD {
   day: string;
 }
 
-export type Comic = Pick<XKCD, "num" | "title" | "img" | "alt">
+export type Comic = Pick<XKCD, "num" | "title" | "img" | "alt">;
 
 export const fetchComic = async (num?: number) => {
   try {
-    const comicData = (await fetch(`${BASE_URL}/${num ? num + '/' : ''}info.0.json`).then(res => res.json())) as XKCD;
+    const comicData = (await fetch(`${BASE_URL}/${num ? num + "/" : ""}info.0.json`).then((res) => res.json())) as XKCD;
     const filteredData: Comic = {
       num: comicData.num,
       title: comicData.title,
       img: comicData.img,
-      alt: comicData.alt
-    }
+      alt: comicData.alt,
+    };
     return filteredData;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
-}
+};
 
 export const maxNum = async () => {
   try {
-    const comicData = (await fetch(`${BASE_URL}/info.0.json`).then(res => res.json())) as XKCD;
+    const comicData = (await fetch(`${BASE_URL}/info.0.json`).then((res) => res.json())) as XKCD;
     return comicData.num;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return -1;
   }
-}
+};

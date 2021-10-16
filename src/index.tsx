@@ -21,7 +21,7 @@ export default function main() {
           subtitle="View a random xkcd comic."
           actions={
             <ActionPanel>
-              <OpenRandomComic max={num} />
+              <OpenRandomComic maxNum={num} />
             </ActionPanel>
           }
         />
@@ -30,7 +30,7 @@ export default function main() {
           subtitle="View the latest xkcd comic."
           actions={
             <ActionPanel>
-              <OpenComic num={num} />
+              <OpenComic maxNum={num} num={num} />
             </ActionPanel>
           }
         />
@@ -43,7 +43,7 @@ export default function main() {
             keywords={[num - idx + ""]}
             actions={
               <ActionPanel>
-                <OpenComic num={num - idx} />
+                <OpenComic maxNum={num} num={num - idx} />
               </ActionPanel>
             }
           />

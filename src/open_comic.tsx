@@ -1,11 +1,11 @@
-import { PushAction } from "@raycast/api";
+import { PushAction, PushActionProps } from "@raycast/api";
 import ComicPage from "./comic";
-export const OpenComic = ({ num }: { num: number }) => {
-  return <PushAction title={`Open #${num}`} target={<ComicPage num={num} />} />;
+export const OpenComic = ({ maxNum, num, ...props }: { maxNum: number; num: number } & Partial<PushActionProps>) => {
+  return <PushAction title={`Open #${num}`} target={<ComicPage maxNum={maxNum} num={num} />} {...props} />;
 };
 export default OpenComic;
 
-export const OpenRandomComic = ({ max }: { max: number }) => {
-  const num = Math.floor(Math.random() * max + 1);
-  return <PushAction title={`Open a random comic`} target={<ComicPage num={num} />} />;
+export const OpenRandomComic = ({ maxNum }: { maxNum: number }) => {
+  const num = Math.floor(Math.random() * maxNum + 1);
+  return <PushAction title={`Open a random comic`} target={<ComicPage maxNum={maxNum} num={num} />} />;
 };
