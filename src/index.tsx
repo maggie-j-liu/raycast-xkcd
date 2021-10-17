@@ -1,14 +1,16 @@
-import { ActionPanel, allLocalStorageItems, Color, Icon, List } from "@raycast/api";
+import { ActionPanel, allLocalStorageItems, Color, Icon, List, setLocalStorageItem } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { maxNum } from "./xkcd";
-import { OpenComic, OpenRandomComic } from "./open_comic";
+import { OpenComic, OpenRandomComic, OpenRandomUnreadComic } from "./open_comic";
 import { useAtom } from "jotai";
-import { maxNumAtom, readStatusAtom } from "./atoms";
+import { lastViewedAtom, maxNumAtom, readStatusAtom, totalReadAtom } from "./atoms";
 
 export default function main() {
   const [num, setNum] = useAtom(maxNumAtom);
   const [readStatus, setReadStatus] = useAtom(readStatusAtom);
   const [loading, setLoading] = useState(true);
+  const [totalRead] = useAtom(totalReadAtom);
+  const [lastViewed, setLastViewed] = useAtom(lastViewedAtom);
   useEffect(() => {
     (async () => {
       const data = await maxNum();
@@ -18,6 +20,8 @@ export default function main() {
         if (key.startsWith("read:comic:")) {
           const comicNum = Number(key.slice("read:comic:".length));
           readStatus[comicNum] = val;
+        } else if (key === "last_viewed") {
+          setLastViewed(val);
         }
       }
       setReadStatus({ ...readStatus });
@@ -29,15 +33,37 @@ export default function main() {
   return (
     <List>
       <List.Section title="Commands">
+        {totalRead < num && (
+          <List.Item
+            title="Random Unread"
+            subtitle=" Read a random unread xkcd comic."
+            actions={
+              <ActionPanel>
+                <OpenRandomUnreadComic />
+              </ActionPanel>
+            }
+          />
+        )}
         <List.Item
           title="Random"
-          subtitle="View a random xkcd comic."
+          subtitle="Read a random xkcd comic."
           actions={
             <ActionPanel>
               <OpenRandomComic />
             </ActionPanel>
           }
         />
+        {lastViewed > 0 && (
+          <List.Item
+            title="Last Viewed"
+            subtitle="Pick up where you left off!"
+            actions={
+              <ActionPanel>
+                <OpenComic num={lastViewed} />
+              </ActionPanel>
+            }
+          />
+        )}
         <List.Item
           title="Latest"
           subtitle="View the latest xkcd comic."
@@ -48,7 +74,7 @@ export default function main() {
           }
         />
       </List.Section>
-      <List.Section title="xkcd Comics">
+      <List.Section title="xkcd Comics" subtitle={`${totalRead} read out of ${num}`}>
         {[...Array(num)].map((_, idx) => (
           <List.Item
             key={num - idx}

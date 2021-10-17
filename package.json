@@ -2,15 +2,15 @@
   "name": "xkcd",
   "title": "xkcd",
   "description": "",
-  "icon": "command-icon.png",
+  "icon": "icon.png",
   "author": "maggie",
   "license": "MIT",
   "commands": [
     {
       "name": "index",
       "title": "xkcd",
-      "subtitle": "",
-      "description": "Browse the xkcd comics.",
+      "subtitle": "https://xkcd.com",
+      "description": "Browse the xkcd comics and keep track of the ones you've read.",
       "mode": "view"
     }
   ],
