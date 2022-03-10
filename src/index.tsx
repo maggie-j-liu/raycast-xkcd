@@ -2,8 +2,9 @@ import { Action, ActionPanel, Color, Icon, List, LocalStorage } from "@raycast/a
 import { useEffect, useState } from "react";
 import { Comic, fetchComic, maxNum } from "./xkcd";
 import { useAtom } from "jotai";
-import { lastViewedAtom, maxNumAtom, readStatusAtom, totalReadAtom } from "./atoms";
+import { currentComicAtom, lastViewedAtom, maxNumAtom, readStatusAtom, totalReadAtom } from "./atoms";
 import getRandomUnread from "./get_random_unread";
+import OpenComicInBrowser from "./open_in_browser";
 
 export default function main() {
   const [num, setNum] = useAtom(maxNumAtom);
@@ -12,7 +13,7 @@ export default function main() {
   const [totalRead] = useAtom(totalReadAtom);
   const [lastViewed, setLastViewed] = useAtom(lastViewedAtom);
   const [comicData, setComicData] = useState<Comic | null>(null);
-  const [currentComic, setCurrentComic] = useState(-1);
+  const [currentComic, setCurrentComic] = useAtom(currentComicAtom);
   const [selectedId, setSelectedId] = useState("");
   useEffect(() => {
     if (currentComic === -1) return;
@@ -91,6 +92,7 @@ ${comicData.alt}
                     setCurrentComic(getRandomUnread(readStatus, num));
                   }}
                 />
+                <OpenComicInBrowser />
               </ActionPanel>
             }
             detail={
@@ -113,6 +115,7 @@ ${comicData.alt}
                   setCurrentComic(Math.floor(Math.random() * num + 1));
                 }}
               />
+              <OpenComicInBrowser />
             </ActionPanel>
           }
           detail={
@@ -133,6 +136,11 @@ ${comicData.alt}
                 markdown={markdownString === null ? undefined : markdownString}
               />
             }
+            actions={
+              <ActionPanel>
+                <OpenComicInBrowser />
+              </ActionPanel>
+            }
           />
         )}
         <List.Item
@@ -144,6 +152,11 @@ ${comicData.alt}
               isLoading={markdownString === null}
               markdown={markdownString === null ? undefined : markdownString}
             />
+          }
+          actions={
+            <ActionPanel>
+              <OpenComicInBrowser />
+            </ActionPanel>
           }
         />
       </List.Section>
@@ -162,6 +175,11 @@ ${comicData.alt}
             }
             accessoryIcon={readStatus[num - idx] ? undefined : { source: Icon.Dot, tintColor: Color.Blue }}
             accessoryTitle={readStatus[num - idx] ? "" : "unread"}
+            actions={
+              <ActionPanel>
+                <OpenComicInBrowser />
+              </ActionPanel>
+            }
           />
         ))}
       </List.Section>

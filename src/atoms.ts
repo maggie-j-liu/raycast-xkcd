@@ -10,3 +10,4 @@ export const totalReadAtom = atom((get) => {
   return numberReadEntries;
 });
 export const lastViewedAtom = atom(-1);
+export const currentComicAtom = atom(-1);
